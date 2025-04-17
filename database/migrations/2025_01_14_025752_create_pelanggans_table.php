@@ -19,7 +19,15 @@ class CreatePelanggansTable extends Migration
             $table->text('Alamat');
             $table->string('NoTelp', 15);
             $table->string('email')->unique();
+
+             // Menambahkan kolom untuk wilayah
+             $table->unsignedBigInteger('province_id')->nullable();
+             $table->unsignedBigInteger('regency_id')->nullable();
+             $table->unsignedBigInteger('district_id')->nullable();
+             $table->unsignedBigInteger('village_id')->nullable();
             $table->timestamps();
+
+            
         });
     }
 

@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 use App\Pelanggan;
-use App\Notifications\CustomerNotification;
+// use App\Notifications\CustomerNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MemberMail;
+use App\Models\Penjualan; 
+use App\Models\Province;
+use App\Models\District;
+use App\Models\Regency; 
+use App\Models\Village;   
 class PelangganController extends Controller
 {
     /**
@@ -37,7 +42,11 @@ class PelangganController extends Controller
      */
     public function create()
     {
-        return view('pelanggan.create');
+        $provinces = Province::all();  
+        $regencies = Regency::all(); 
+        $districts = District::all();
+        $villages = Village::all(); 
+        return view('pelanggan.create', compact('provinces', 'regencies', 'districts', 'villages' ));
     }
 
     /**
@@ -53,6 +62,10 @@ class PelangganController extends Controller
             'Alamat' => 'required',
             'NoTelp' => 'required|max:15',
             'email' => 'required|email|unique:pelanggans',
+            'province_id' => 'required|exists:indoregion_provinces,id',
+            'regency_id' => 'required|exists:indoregion_regencies,id',
+            'district_id' => 'required|exists:indoregion_districts,id',
+            'village_id' => 'required|exists:indoregion_villages,id',
         ]);
     
         $pelanggan = Pelanggan::create([
@@ -60,6 +73,10 @@ class PelangganController extends Controller
             'Alamat' => $request->Alamat,
             'NoTelp' => $request->NoTelp,
             'email' => $request->email,
+            'province_id' => $request->province_id,
+            'regency_id' => $request->regency_id,
+            'district_id' => $request->district_id,
+            'village_id' => $request->village_id,
         ]);
     
         $data = ['pelanggan' => $pelanggan];
@@ -91,8 +108,11 @@ class PelangganController extends Controller
     public function edit($id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
-
-        return view('pelanggan.edit', compact('pelanggan'));
+        $provinces = Province::all();  
+        $regencies = Regency::all(); 
+        $districts = District::all();
+        $villages = Village::all(); 
+        return view('pelanggan.edit', compact('pelanggan','provinces', 'regencies', 'districts', 'villages'));
     }
 
     /**
@@ -107,7 +127,11 @@ class PelangganController extends Controller
         $request->validate([
             'NamaPelanggan' => 'required|string|max:200',
             'Alamat' => 'required',
-            'NoTelp' => 'required|max:15'
+            'NoTelp' => 'required|max:15',
+            'province_id' => 'required|exists:indoregion_provinces,id',
+            'regency_id' => 'required|exists:indoregion_regencies,id',
+            'district_id' => 'required|exists:indoregion_districts,id',
+            'village_id' => 'required|exists:indoregion_villages,id',
         ]);
         
         $pelanggan = Pelanggan::findOrFail($id);
@@ -123,7 +147,34 @@ class PelangganController extends Controller
      */
     public function destroy(Pelanggan $pelanggan)
     {
+        Penjualan::where('PelangganID', $pelanggan->id)->update(['PelangganID' => null]);
+
+        // Hapus pelanggan
+       
         $pelanggan->delete();
+    
         return redirect()->route('pelanggan.index')->with('success', 'Data Berhasil DiHapus');
+    }
+    
+
+
+    public function getRegencies($province_id)
+    {
+        $regencies = Regency::where('province_id', $province_id)->get();
+        return response()->json($regencies);
+    }
+
+    // Mengambil data kecamatan berdasarkan kabupaten
+    public function getDistricts($regency_id)
+    {
+        $districts = District::where('regency_id', $regency_id)->get();
+        return response()->json($districts);
+    }
+
+    // Mengambil data desa berdasarkan kecamatan
+    public function getVillages($district_id)
+    {
+        $villages = Village::where('district_id', $district_id)->get();
+        return response()->json($villages);
     }
 }

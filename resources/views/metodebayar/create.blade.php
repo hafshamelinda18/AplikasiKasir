@@ -1,33 +1,35 @@
 @extends('template.style')
 
 @section('content')
+<div class="card mx-auto mt-4" style="max-width: 700px; border: 2px solid #000; border-radius: 8px;">
+    <div class="card-header">
+        <h2 class="mb-0">Tambah Data Metode Bayar</h2>
+    </div>
 
+    <div class="card-body">
+        {{-- Tampilkan error validasi --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-<div class = "container">
-<h2> Tambah Data Metod Bayar </h2>
+        <form action="{{ route('metodebayar.store') }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="NamaMetode">Nama Metode</label>
+                <input type="text" name="NamaMetode" id="NamaMetode" class="form-control" value="{{ old('NamaMetode') }}" required>
+            </div>
 
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li> {{ $error }} </li>
-        @endforeach
-</ul>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                <a href="{{ route('metodebayar.index') }}" class="btn btn-sm btn-warning">Batal</a>
+            </div>
+        </form>
+    </div>
 </div>
-@endif
-
-<form action="{{ route('metodebayar.store') }}" method="POST">
-    @csrf
-    <div class="form-group">
-        <label for="NamaMetode"> Nama Metode</label>
-        <input type="text" name="NamaMetode" id="NamaMetode" class="form-control" value="{{ old('NamaMetode') }}" required>
-</div>
-
-
-<button type="submit" class="btn btn-sm btn-primary mt-3"> Simpan </button>
-<a href="{{ route('metodebayar.index') }}" class="btn btn-sm btn-warning mt-3">Batal</a>
-</div>
-</form>
-
-
 @endsection

@@ -1,81 +1,91 @@
-<title>Struk Pembayaran</title>
-<style>
-    body {
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 12px;
-        margin: 0;
-        padding: 0;
-    }
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struk Pembayaran</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+        }
 
-    .container {
-        width: 80mm;
-        margin: auto;
-        padding: 10px;
-    }
+        .container {
+            width: 80mm;
+            margin: auto;
+            padding: 10px;
+        }
 
-    .header {
-        text-align: center;
-        border-bottom: 1px dashed #000;
-        padding-bottom: 5px;
-        margin-bottom: 10px;
-    }
+        .header {
+            text-align: center;
+            border-bottom: 1px dashed #000;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
 
-    .header img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 5px;
-    }
+        .header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 5px;
+        }
 
-    .info-toko {
-        text-align: center;
-    }
+        .info-toko {
+            text-align: center;
+        }
 
-    .info-toko p {
-        margin: 0;
-        line-height: 1.2;
-    }
+        .info-toko p {
+            margin: 0;
+            line-height: 1.2;
+        }
 
-    .section {
-        margin-bottom: 10px;
-    }
+        .section {
+            margin-bottom: 10px;
+        }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-    th, td {
-        padding: 2px 0;
-        text-align: left;
-    }
+        th, td {
+            padding: 2px 0;
+            text-align: left;
+        }
 
-    .text-right {
-        text-align: right;
-    }
+        .text-right {
+            text-align: right;
+        }
 
-    .total-row {
-        font-weight: bold;
-        border-top: 1px dashed #000;
-        border-bottom: 1px dashed #000;
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
+        .total-row {
+            font-weight: bold;
+            border-top: 1px dashed #000;
+            border-bottom: 1px dashed #000;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
 
-    .footer {
-        text-align: center;
-        margin-top: 10px;
-        font-style: italic;
-        font-size: 11px;
-    }
+        .footer {
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+            font-size: 11px;
+        }
 
-    hr {
-        border: none;
-        border-top: 1px dashed #000;
-        margin: 8px 0;
-    }
-</style>
+        hr {
+            border: none;
+            border-top: 1px dashed #000;
+            margin: 8px 0;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            window.print();
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -141,5 +151,5 @@
     @endif
 </div>
 
-
 </body>
+</html>

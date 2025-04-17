@@ -87,8 +87,9 @@ class HomeController extends Controller
         // Format: Minggu Ke-X Bulan NamaBulan
         $weeklyIncome["Minggu Ke-$week Bulan $currentMonthName"] = $income;
     }
+    $monthName = Carbon::now()->locale('id')->translatedFormat('F');
 
-        return view('home', compact('belumLunas', 'hampirHabis', 'produkSudahKadaluarsa', 'produkSupply', 'bestSellers', 'monthlyIncome', 'weeklyIncome'));
+        return view('home', compact('belumLunas', 'hampirHabis', 'produkSudahKadaluarsa', 'produkSupply', 'bestSellers', 'monthlyIncome', 'weeklyIncome', 'monthName'));
     }
 
     public function sendTestEmail()

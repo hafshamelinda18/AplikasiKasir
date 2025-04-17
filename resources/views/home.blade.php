@@ -104,7 +104,7 @@
             </div>
 
             <!-- Pemasukan Per Minggu -->
-            <h4 class="text-center mb-3">Pemasukan Per Minggu</h4>
+            <h4 class="text-center mb-3">Pemasukan Per-Minggu Bulan {{ $monthName }}</h4>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead class="table-dark">

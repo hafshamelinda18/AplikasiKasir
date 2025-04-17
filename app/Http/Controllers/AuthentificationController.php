@@ -7,6 +7,9 @@ use App\User; // Pastikan mengimpor model User
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\KasirMail;
+use Illuminate\Support\Str;
 
 class AuthentificationController extends Controller
 {
@@ -59,12 +62,24 @@ class AuthentificationController extends Controller
 
         $this->validate($request, $rules);
 
+        $passwordPlain = $request->password;
+
         // Membuat user baru
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($passwordPlain),
         ]);
+        // Menyiapkan data yang ingin dikirimkan
+    $data = [
+        'name' => $user->name,
+        'email' => $user->email,
+        'password' => $passwordPlain,
+    ];
+
+    // Kirim email pemberitahuan ke kasir
+    Mail::to($user->email)->send(new KasirMail($data));
+
 
         // Redirect ke halaman home setelah berhasil registrasi
         return redirect()->route('home')->with('success', 'Akun Kasir Berhasil Didaftarkan!');

@@ -59,7 +59,13 @@
         <td>{{$loop->iteration}}</td>
         <td> {{$item->NamaPelanggan}}</td>
         <td> {{$item->email}}</td>
-        <td> {{$item->Alamat}}</td>
+        <td style="white-space: normal; word-break: break-word; max-width: 200px;"> 
+    {{ $item->Alamat }},
+    {{ $item->village->name ?? '-' }},
+    {{ $item->district->name ?? '-' }},
+    {{ $item->regency->name ?? '-' }},
+    {{ $item->province->name ?? '-' }}
+</td>
         <td> {{$item->NoTelp}}</td>
         @if(Auth::check() && Auth::user()->role == 'admin')
         <td>

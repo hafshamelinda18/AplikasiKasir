@@ -23,20 +23,26 @@
         table-layout: fixed;
         width: 100%;
     }
+
+    /* Pastikan font modal struk tidak ikut modal utama */
+    .struk-content {
+        font-family: 'Courier New', Courier, monospace;
+    }
 </style>
 
-<div class="container col-lg-12 col-md-12">
-    <div class="col-md-9 mx-auto">
+<div class="container-fluid">
+    <div class="col-md-10 mx-auto">
         <h2 class="text-center mb-4">Data Penjualan</h2>
 
         @if(session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
-        <div class="mb-4 d-flex justify-content-between align-items-center">
-            <a href="{{ route('penjualan.create') }}" class="btn btn-sm btn-primary">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="{{ route('penjualan.create') }}" class="btn btn-primary btn-sm">
                 Tambah <i class="material-icons text-sm">add</i>
             </a>
             <form action="{{ route('penjualan.index') }}" method="GET" class="d-flex">
@@ -66,31 +72,34 @@
                                 <tr>
                                     <td>{{ ($penjualans->currentPage() - 1) * $penjualans->perPage() + $loop->iteration }}</td>
                                     <td>{{ $penjualan->TanggalPenjualan }}</td>
-                                    <td> @if($penjualan->pelanggan)
+                                    <td>
+                                        @if($penjualan->pelanggan)
                                             {{ $penjualan->pelanggan->NamaPelanggan }}
                                         @else
-                                            <span class="btn btn-secondary">No Member</span>
-                                        @endif</td>
+                                            <span class="badge bg-secondary">No Member</span>
+                                        @endif
+                                    </td>
                                     <td>Rp{{ number_format($penjualan->TotalHarga, 2, ',', '.') }}</td>
                                     <td>
-                                        <div class="text-uppercase fw-bold {{ $penjualan->status_pembayaran == 'lunas' ? 'text-success' : 'text-danger' }}" style="font-size: 0.8rem;">
+                                        <span class="fw-bold text-uppercase {{ $penjualan->status_pembayaran === 'lunas' ? 'text-success' : 'text-danger' }}" style="font-size: 0.8rem;">
                                             {{ $penjualan->status_pembayaran }}
-                                        </div>
+                                        </span>
                                     </td>
                                     <td>
-                                        @if($penjualan->status_pembayaran == 'belum lunas')
-                                            <a href="{{ route('pembayaran.create', $penjualan->PenjualanID) }}" class="btn btn-sm btn-success" title="Bayar">
+                                        @if($penjualan->status_pembayaran === 'belum lunas')
+                                            <a href="{{ route('pembayaran.create', $penjualan->PenjualanID) }}" class="btn btn-success btn-sm" title="Bayar">
                                                 <i class="material-icons text-sm">payment</i>
                                             </a>
                                         @endif
-                                        <a href="javascript:void(0)" onclick="lihatStruk('{{ $penjualan->PenjualanID }}')" class="btn btn-sm btn-info" title="Lihat Struk">
-                                            <i class="material-icons text-sm">visibility</i>
-                                        </a>
-                                        @if($penjualan->status_pembayaran != 'belum lunas')
-                                            <form action="{{ route('penjualan.destroy', $penjualan->PenjualanID) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" class="d-inline">
+                                        <a href="{{ route('pembayaran.struk', $penjualan->PenjualanID) }}" target="_blank" class="btn btn-info btn-sm" title="Lihat Struk">
+    <i class="material-icons text-sm">visibility</i>
+</a>
+
+                                        @if($penjualan->status_pembayaran !== 'belum lunas')
+                                            <form action="{{ route('penjualan.destroy', $penjualan->PenjualanID) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Hapus">
                                                     <i class="material-icons text-sm">delete</i>
                                                 </button>
                                             </form>
@@ -105,7 +114,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-3 px-3">
+                <div class="px-3">
                     {{ $penjualans->links() }}
                 </div>
             </div>
@@ -114,24 +123,26 @@
 </div>
 
 <!-- Modal Struk -->
-<div class="modal fade" id="modalStruk" tabindex="-1" aria-labelledby="modalStrukLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<!-- <div class="modal fade" id="modalStruk" tabindex="-1" aria-labelledby="modalStrukLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Struk Pembayaran</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
-            <div class="modal-body" id="modalStrukContent"></div>
+            <div class="modal-body">
+                <div id="modalStrukContent" class="struk-content"></div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 <button type="button" class="btn btn-primary" onclick="printStruk()">Print</button>
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- Script -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     setTimeout(() => $('.alert').fadeOut('slow'), 5000);
@@ -139,9 +150,9 @@
     function lihatStruk(penjualanId) {
         $.ajax({
             url: `/penjualan/${penjualanId}/struk`,
-            type: 'GET',
+            method: 'GET',
             success: function(response) {
-                $('#modalStrukContent').html(response);
+                $('#modalStrukContent').html(`<div class="struk-content">${response}</div>`);
                 $('#modalStruk').modal('show');
             },
             error: function() {
@@ -160,11 +171,9 @@
     });
 
     function printStruk() {
-        const printContents = document.getElementById('modalStrukContent').innerHTML;
+        const content = document.getElementById('modalStrukContent').innerHTML;
         const iframe = document.createElement('iframe');
         iframe.style.position = 'fixed';
-        iframe.style.right = '0';
-        iframe.style.bottom = '0';
         iframe.style.width = '0';
         iframe.style.height = '0';
         iframe.style.border = '0';
@@ -178,11 +187,18 @@
                     <title>Print Struk</title>
                     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                     <style>
-                        body { font-family: Arial, sans-serif; padding: 20px; }
-                        @media print { body { font-size: 14px; } }
+                        body {
+                            padding: 20px;
+                            font-family: 'Courier New', Courier, monospace;
+                        }
+                        @media print {
+                            body {
+                                font-size: 14px;
+                            }
+                        }
                     </style>
                 </head>
-                <body>${printContents}</body>
+                <body>${content}</body>
             </html>
         `);
         doc.close();
@@ -190,8 +206,10 @@
         iframe.onload = function () {
             iframe.contentWindow.focus();
             iframe.contentWindow.print();
-            setTimeout(() => document.body.removeChild(iframe), 1000);
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+            }, 1000);
         };
     }
-</script>
+</script> -->
 @endsection

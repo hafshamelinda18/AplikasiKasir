@@ -106,5 +106,10 @@ Route::delete('/profiltoko/{profiltoko}', [ProfilTokoController::class, 'destroy
 Route::get('/user', [AuthentificationController::class, 'index'])->name('user.index');
     });
     Route::get('/penjualan/{id}/struk', [PembayaranController::class, 'strukDariPenjualan']);
+   
+    Route::get('/penjualan/{id}/struk', [PembayaranController::class, 'struk'])->name('pembayaran.struk');
 
+    Route::get('/get-regencies/{province_id}', [PelangganController::class, 'getRegencies']);
+    Route::get('/get-districts/{regency_id}', [PelangganController::class, 'getDistricts']);
+    Route::get('/get-villages/{district_id}', [PelangganController::class, 'getVillages']);
 });

@@ -22,7 +22,8 @@ class CreatePenjualansTable extends Migration
             $table->string('NamaKasir', 50);
             $table->timestamps();
 
-            $table->foreign('PelangganID')->references('PelangganID')->on('pelanggans')->ondelete('cascade');
+            $table->foreign('PelangganID')->references('PelangganID')->on('pelanggans')->onDelete('set null');
+
         });
 
         
