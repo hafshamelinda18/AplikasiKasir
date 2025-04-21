@@ -33,8 +33,7 @@ Route::get('/', function () {
 });
 Route::get('/login', [AuthentificationController::class, 'showFormLogin'])->name('login');
 Route::post('/login', [AuthentificationController::class, 'postLogin'])->name('login.post');
-Route::get('/register', [AuthentificationController::class, 'showFormRegister'])->name('register');
-Route::post('/register-post', [AuthentificationController::class, 'postRegister'])->name('register.post');
+
 
 
 Route::middleware(['auth', 'role:admin,kasir'])->group(function () {
@@ -73,6 +72,10 @@ Route::get('/laporan-produk-keluar', [ProdukKeluarController::class, 'laporanPro
 
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
+
+Route::get('/register', [AuthentificationController::class, 'showFormRegister'])->name('register');
+Route::post('/register-post', [AuthentificationController::class, 'postRegister'])->name('register.post');
+
 Route::get('/pelanggan/create', [PelangganController::class, 'create'])->name('pelanggan.create');
 Route::post('/pelanggan', [PelangganController::class, 'store'])->name('pelanggan.store');
 Route::get('/pelanggan/{pelanggan}', [PelangganController::class, 'show'])->name('pelanggan.show');
@@ -112,4 +115,6 @@ Route::get('/user', [AuthentificationController::class, 'index'])->name('user.in
     Route::get('/get-regencies/{province_id}', [PelangganController::class, 'getRegencies']);
     Route::get('/get-districts/{regency_id}', [PelangganController::class, 'getDistricts']);
     Route::get('/get-villages/{district_id}', [PelangganController::class, 'getVillages']);
+    Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+
 });

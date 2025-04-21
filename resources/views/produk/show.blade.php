@@ -30,11 +30,19 @@
                 </tr>
                 <tr>
                     <th>Kategori Produk</th>
-                    <td>{{ $produk->kategori->NamaKategori }}</td>
+                    @if ($produk->kategori)
+                      <td>{{ $produk->kategori->NamaKategori }}</td>
+                    @else
+                        <td><span class="text-danger">Tidak Ada Kategori</span></td>
+                    @endif
                 </tr>
                 <tr>
                     <th>Satuan Produk</th>
-                    <td>{{ $produk->satuan->NamaSatuan }}</td>
+                    @if ($produk->satuan)
+            <td>{{ $produk->satuan->NamaSatuan }}</td>
+        @else
+            <td><span class="text-danger">Tidak Ada Satuan</span></td>
+        @endif
                 </tr>
                 <tr>
                     <th>Harga</th>

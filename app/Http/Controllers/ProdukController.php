@@ -5,6 +5,7 @@ use App\Produk;
 use App\Kategori;
 use App\Satuan;
 use App\SupplyDetail;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
@@ -55,7 +56,7 @@ class ProdukController extends Controller
     {
         $request->validate([
             'KodeProduk' => 'required|unique:produk,KodeProduk',
-            'NamaProduk' => 'required|string|max:100',
+            'NamaProduk' => 'required|unique:produk,NamaProduk',
             'KategoriID' => 'required|exists:kategoris,KategoriID',
             'SatuanID' => 'required|exists:satuans,SatuanID',
             'Harga' => 'required|numeric|min:0',
@@ -120,7 +121,10 @@ class ProdukController extends Controller
         
         $request->validate([
             // 'KodeProduk' => 'required|unique:produk,KodeProduk',
-            'NamaProduk' => 'required|string|max:100',
+            'NamaProduk' => [
+                'required',
+                Rule::unique('produk', 'NamaProduk')->ignore($id, 'ProdukID'),
+            ],
             'KategoriID' => 'required|exists:kategoris,KategoriID',
             'SatuanID' => 'required|exists:satuans,SatuanID',
             'Harga' => 'required|numeric|min:0',
@@ -164,7 +168,9 @@ class ProdukController extends Controller
 
     public function cek($id)
     {
+        // dd($id);
         $DetailSup = SupplyDetail::findOrFail($id);
+        
         $DetailSup->tanggal_cek = now(); // Set tanggal cek ke waktu sekarang
         $DetailSup->save();
 

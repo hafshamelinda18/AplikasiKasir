@@ -40,7 +40,12 @@
                         @foreach($hampirHabis as $produk)
                             <tr>
                                 <td>{{ $produk->NamaProduk }}</td>
-                                <td>{{ $produk->kategori->NamaKategori }}</td>
+                                @if ($produk->kategori)
+            <td>{{ $produk->kategori->NamaKategori }}</td>
+        @else
+            <td><span class="text-danger">Tidak Ada Kategori</span></td>
+        @endif
+
                                 <td>{{ $produk->Stok }}</td>
                             </tr>
                         @endforeach
@@ -67,7 +72,11 @@
                                 @if (!is_null($detail->tanggal_kadaluarsa) && Carbon\Carbon::parse($detail->tanggal_kadaluarsa)->diffInDays(now()) <= 30 && is_null($detail->tanggal_cek))
                                     <tr>
                                         <td>{{ $detail->produk->NamaProduk }}</td>
-                                        <td>{{ $detail->produk->kategori->NamaKategori }}</td>
+                                                                            @if ($produk->kategori)
+                                                <td>{{ $detail->produk->kategori->NamaKategori }}</td>
+                                            @else
+                                                <td><span class="text-danger">Tidak Ada Kategori</span></td>
+                                            @endif
                                         <td>{{ Carbon\Carbon::parse($detail->tanggal_kadaluarsa)->format('d M Y') }}</td>
                                     </tr>
                                 @endif

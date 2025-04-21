@@ -47,12 +47,20 @@ class AuthentificationController extends Controller
     // Menampilkan form register
     public function showFormRegister()
     {
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Akses ditolak. Hanya admin yang bisa mendaftarkan kasir.');
+        }
         return view('Authenfication.register');
     }
 
     // Proses register
     public function postRegister(Request $request)
     {
+
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Akses ditolak. Hanya admin yang bisa mendaftarkan kasir.');
+        }
+    
         // Validasi input
         $rules = [
             'name' => 'required|string|max:255',
@@ -111,4 +119,18 @@ class AuthentificationController extends Controller
         'search' => $search
         ]);
     }
+
+    public function destroy($id)
+{
+    $user = User::findOrFail($id);
+
+    if ($user->role !== 'kasir') {
+        return redirect()->route('user.index')->with('error', 'Hanya user dengan role kasir yang bisa dihapus.');
+    }
+
+    $user->delete();
+
+    return redirect()->route('user.index')->with('success', 'User berhasil dihapus.');
+}
+
 }

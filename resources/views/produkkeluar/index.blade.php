@@ -40,11 +40,12 @@
                 </tr>
             </thead>
             <tbody>
+            @php $no = ($produkkeluars->currentPage() - 1) * $produkkeluars->perPage() + 1; @endphp
                 @forelse ($produkkeluars as $item)
                     @foreach ($item->detailKeluar as $index => $detail)
                         <tr>
                             @if ($loop->first)
-                                <td rowspan="{{ $item->detailKeluar->count() }}">{{ ($produkkeluars->currentPage() - 1) * $produkkeluars->perPage() + $loop->parent->iteration }}</td>
+                                <td rowspan="{{ $item->detailKeluar->count() }}">{{ $no++ }}</td>
                                 <td rowspan="{{ $item->detailKeluar->count() }}">
                                     {{ $item->detailKeluar->groupBy('ProdukID')->count() }} 
                                 </td>

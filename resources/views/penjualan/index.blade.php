@@ -95,15 +95,7 @@
     <i class="material-icons text-sm">visibility</i>
 </a>
 
-                                        @if($penjualan->status_pembayaran !== 'belum lunas')
-                                            <form action="{{ route('penjualan.destroy', $penjualan->PenjualanID) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Hapus">
-                                                    <i class="material-icons text-sm">delete</i>
-                                                </button>
-                                            </form>
-                                        @endif
+                                      
                                     </td>
                                 </tr>
                             @empty

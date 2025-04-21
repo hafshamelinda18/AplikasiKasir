@@ -7,10 +7,12 @@
     <h2 class="text-center mb-4">Data Produk</h2>
 
     @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
 
     @if(Auth::check() && Auth::user()->role == 'admin')
     <div class="mb-4 d-flex justify-content-between align-items-center">
@@ -61,16 +63,30 @@
                     <td>{{ 'Rp' . number_format($produk->Harga, 2, ',', '.') }}</td>
                     <td>{{ $produk->Stok }}</td>
                     <td>
-                            @if(isset($produk->DetailSup) && $produk->DetailSup->isNotEmpty())
-                                @foreach($produk->DetailSup as $masuk)
-                                    @if ($masuk->tanggal_kadaluarsa)
-                                        <p>{{ \Carbon\Carbon::parse($masuk->tanggal_kadaluarsa)->format('d-m-Y') }}</p>
-                                    @endif
-                                @endforeach
-                            @else
-                                <p>Tidak ada data</p>
-                            @endif
-                        </td>
+                        @if(isset($produk->DetailSup) && $produk->DetailSup->isNotEmpty())
+                            @foreach($produk->DetailSup as $masuk)
+                                @if ($masuk->tanggal_kadaluarsa)
+                                    @php
+                                        $kadaluarsa = \Carbon\Carbon::parse($masuk->tanggal_kadaluarsa);
+                                        $selisihHari = now()->diffInDays($kadaluarsa, false); // false agar negatif kalau sudah lewat
+                                        $class = '';
+
+                                        if ($selisihHari <= 7) {
+                                            $class = 'text-white bg-danger fw-bold p-1 rounded';
+                                        } elseif ($selisihHari <= 30) {
+                                            $class = 'text-danger fw-bold';
+                                        }
+                                    @endphp
+                                    <p class="{{ $class }}">
+                                        {{ $kadaluarsa->format('d-m-Y') }}
+                                    </p>
+                                @endif
+                            @endforeach
+                        @else
+                            <p>Tidak ada data</p>
+                        @endif
+                    </td>
+
                         @if(Auth::check() && Auth::user()->role == 'admin')
                         <td>
                             @if(isset($produk->DetailSup) && $produk->DetailSup->isNotEmpty())
@@ -79,7 +95,8 @@
                                         <div style="margin-bottom: 10px;"> <!-- Memberikan jarak antar detail barang -->
                                             @if(is_null($masuk->tanggal_cek))
                                                 <!-- Tombol untuk melakukan cek -->
-                                                <form action="{{ route('produk.cek', $masuk->SupplyID) }}" method="POST" style="display: inline;">
+                                                <form action="{{ route('produk.cek', $masuk->DetailSupID) }}" method="POST" style="display: inline;">
+
                                                     @csrf
                                                     <button type="submit" class="btn btn-success btn-sm" style="margin-top: 5px;"><i class="material-icons text-sm">check</i></button> <!-- Menambahkan margin atas untuk memisahkan tombol dari teks -->
                                                 </form>

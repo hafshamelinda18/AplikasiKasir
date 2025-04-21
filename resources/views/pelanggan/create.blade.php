@@ -21,7 +21,7 @@
     @csrf
     <div class="form-group">
         <label for="NamaPelanggan"> Nama Member</label>
-        <input type="text" name="NamaPelanggan" id="NamaPelanggan" class="form-control" value="{{ old('NamaPelanggan') }}" required>
+        <input type="text" name="NamaPelanggan" id="NamaPelanggan" class="form-control" value="{{ old('NamaPelanggan') }}" required  oninput="validateInput(this)">
 </div>
 
 <div class="form-group">
@@ -142,5 +142,11 @@
             });
         }
     });
+</script>
+<script>
+    function validateInput(input) {
+        // Hanya biarkan karakter yang termasuk dalam huruf dan spasi
+        input.value = input.value.replace(/[^A-Za-z\s]/g, '');
+    }
 </script>
 @endsection

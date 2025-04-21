@@ -108,6 +108,11 @@
             <p>Kasir        : {{ $penjualan->NamaKasir }}</p>
             <p>Pelanggan    : {{ $penjualan->pelanggan->NamaPelanggan ?? 'No Member' }}</p>
             <p>Tgl Bayar    : {{ \Carbon\Carbon::parse($penjualan->TanggalPenjualan)->format('d-m-Y') }}</p>
+            <p>Metode Bayar : @if ($pembayaran->metode)
+                      {{ $pembayaran->metode->NamaMetode }}</td>
+                    @else
+                        <span class="text-danger">Tidak Ada Metode</span></p>
+                    @endif
         </div>
 
         <hr>

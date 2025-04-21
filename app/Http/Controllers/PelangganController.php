@@ -6,11 +6,12 @@ use App\Pelanggan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MemberMail;
-use App\Models\Penjualan; 
+use App\Penjualan; 
 use App\Models\Province;
 use App\Models\District;
 use App\Models\Regency; 
-use App\Models\Village;   
+use App\Models\Village;
+use Illuminate\Validation\Rule;   
 class PelangganController extends Controller
 {
     /**
@@ -58,9 +59,9 @@ class PelangganController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'NamaPelanggan' => 'required|string|max:200',
+            'NamaPelanggan' => 'required|unique:pelanggans,NamaPelanggan',
             'Alamat' => 'required',
-            'NoTelp' => 'required|max:15',
+            'NoTelp' => 'required|max:15|unique:pelanggans,NoTelp',
             'email' => 'required|email|unique:pelanggans',
             'province_id' => 'required|exists:indoregion_provinces,id',
             'regency_id' => 'required|exists:indoregion_regencies,id',
@@ -125,9 +126,15 @@ class PelangganController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'NamaPelanggan' => 'required|string|max:200',
+            'NamaPelanggan' => [
+                'required',
+                Rule::unique('pelanggans', 'NamaPelanggan')->ignore($id, 'PelangganID'),
+            ],
             'Alamat' => 'required',
-            'NoTelp' => 'required|max:15',
+            'NoTelp' => [
+                'required',
+                Rule::unique('pelanggans', 'NoTelp')->ignore($id, 'PelangganID'),
+            ],
             'province_id' => 'required|exists:indoregion_provinces,id',
             'regency_id' => 'required|exists:indoregion_regencies,id',
             'district_id' => 'required|exists:indoregion_districts,id',

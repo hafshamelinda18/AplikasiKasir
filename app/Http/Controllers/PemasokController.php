@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Pemasok;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
 class PemasokController extends Controller
@@ -47,8 +48,8 @@ class PemasokController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'Nama' => 'required|string|max:100',
-            'NoTelp' => 'required|numeric',
+            'Nama' => 'required|unique:pemasoks,Nama',
+            'NoTelp' => 'required|numeric|unique:pemasoks,NoTelp',
             'Alamat' => 'required|string|max:100',
             'Email' => 'required|email|unique:pemasoks,Email'
         ]);
@@ -90,11 +91,21 @@ class PemasokController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'Nama' => 'required|string|max:100',
-            'NoTelp' => 'required|numeric',
+            'Nama' => [
+                'required',
+                Rule::unique('pemasoks', 'Nama')->ignore($id, 'PemasokID'),
+            ],
+            'NoTelp' => [
+                'required', 'numeric',
+                Rule::unique('pemasoks', 'NoTelp')->ignore($id, 'PemasokID'),
+            ],
             'Alamat' => 'required|string|max:100',
-            'Email' => 'required|email'
-        ]);
+            'Email' => [
+                'required',
+                'email',
+                Rule::unique('pemasoks', 'Email')->ignore($id, 'PemasokID'),
+            ],
+        ]);       
 
         $pemasok = Pemasok::findOrFail($id);
         $pemasok->update($request->all());

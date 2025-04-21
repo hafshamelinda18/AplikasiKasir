@@ -47,7 +47,9 @@ class SatuanController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'NamaSatuan' => 'required|string|max:20'
+            'NamaSatuan' => 'required|unique:satuans,NamaSatuan'
+], [
+            'NamaSatuan.unique' => 'Nama satuan sudah ada, silakan gunakan nama lain.'
         ]);
 
         Satuan::create($request->all());
@@ -87,7 +89,9 @@ class SatuanController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'NamaSatuan' => 'required|string|max:20'
+            'NamaSatuan' => 'required|unique:satuans,NamaSatuan'
+        ], [
+            'NamaSatuan.unique' => 'Nama satuan sudah ada, silakan gunakan nama lain.'
         ]);
 
         $satuan = Satuan::findOrFail($id);

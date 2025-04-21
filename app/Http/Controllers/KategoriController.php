@@ -48,7 +48,9 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'NamaKategori' => 'required|string|max:50'
+            'NamaKategori' => 'required|unique:kategoris,NamaKategori'
+        ], [
+            'NamaKategori.unique' => 'Nama kategori sudah ada, silakan gunakan nama lain.'
         ]);
 
         Kategori::create($request->all());
@@ -88,7 +90,9 @@ class KategoriController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'NamaKategori' => 'required|string|max:50'
+            'NamaKategori' => 'required|unique:kategoris,NamaKategori'
+], [
+    'NamaKategori.unique' => 'Nama kategori sudah ada, silakan gunakan nama lain.'
         ]);
 
         $kategori = Kategori::findOrFail($id);

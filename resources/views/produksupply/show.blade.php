@@ -32,7 +32,11 @@
                         @foreach($produkSupply->DetailSup as $detail)
                             <tr>
                                 <td>{{ $detail->produk->NamaProduk }}</td>
-                                <td>{{ $detail->pemasok->Nama }}</td>
+                                <td> @if ($detail->pemasok)
+                      {{ $detail->pemasok->Nama }}</td>
+                    @else
+                        <td><span class="text-danger">Tidak Ada Pemasok</span>
+                    @endif</td>
                                 <td>{{ $detail->JumlahMasuk }}</td>
                                 <td>{{'Rp'.number_format($detail->HargaBeli, 2, ',', '.') }}</td>
                                 <td>{{'Rp'.number_format($detail->total_harga, 2, ',', '.') }}</td>
